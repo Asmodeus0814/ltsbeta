@@ -1,0 +1,380 @@
+<!-- views/trucking.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trucking Companies</title>
+  <style>
+    body {
+    display: flex;
+    align-items: stretch;
+    margin: 0;
+    font-family: Arial, sans-serif; /* Added a generic font family */
+    background-image: url('/uploads/background.jpg');
+  }
+  
+  .sidebar {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh; /* Set the height of the sidebar to cover the full height of the page */
+    box-sizing: border-box; /* Include padding and border in the total width/height */
+  }
+  
+  .content {
+    flex: 1;
+    padding: 20px;
+    box-sizing: border-box; /* Include padding and border in the total width/height */
+  }
+  
+  h1 {
+    margin-bottom: 20px;
+  }
+  
+  .nav-item {
+    margin-bottom: 10px;
+    width: 100%; /* Make the navigation items take full width */
+    text-align: center; /* Center the text within each navigation item */
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .nav-item:hover {
+    background-color: #555; /* Change background color on hover */
+  }
+  
+  .logout-btn {
+    margin-top: auto; /* Push the logout button to the bottom of the container */
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #c0392b; /* Red color for logout button */
+    color: #fff;
+  }
+  
+  .logout-btn:hover {
+    background-color: #992d22; /* Darker red on hover */
+  }
+  
+  p {
+    margin-top: 20px;
+  }
+    .content {
+      margin: 20px; /* Add equal margin around the content */
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: white;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center; /* Center-align text */
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    .table-container {
+      max-height: 700px; /* Set the maximum height for the table container */
+      overflow-y: auto; /* Enable vertical scrolling */
+    }
+
+    .form-container {
+      display: none;
+      position: absolute;
+      top: 20px; /* Adjusted top position */
+      right: 10px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .form-container.active {
+      display: block;
+    }
+
+    .form-container form {
+      text-align: left;
+    }
+
+    .form-container label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    .form-container input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
+    .form-container button {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    
+    .add-button {
+      padding: 10px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .add-trucking-btn {
+      position: absolute;
+      top: 80px;
+      right: 250px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .add-trucking-btn-modify {
+      position: absolute;
+      top: 80px;
+      right: 170px;
+      background-color: #e80042;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .export-btn {
+      position: absolute;
+      top: 80px;
+      right: 40px;
+      background-color: #2e02bf;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .delete-button {
+      background-color: #e80042;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .edit-button {
+      background-color: #19faf6;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .form-container select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    }
+  </style>
+  <link rel="icon" href="uploads/favicon.ico" type="image/x-icon">
+</head>
+<div class="sidebar">
+  <div class="nav-item" onclick="toggleDashboard()">Dashboard</div>
+  <div class="nav-item" onclick="toggleTrucking()">Trucking Companies</div>
+  <div class="nav-item" onclick="toggleDrivers()">Drivers</div>
+  <div class="nav-item" onclick="toggleTruckUnit()">Truck Units</div>
+  <div class="nav-item" onclick="toggleDeliveries()">Deliveries</div>
+  <div class="nav-item" onclick="toggleMaintenance()"> Maintenance</div>
+  <div class="nav-item" onclick= "toggleBilling()">Billing</div>
+  <div class="nav-item" onclick="toggleUsers()">User Settings</div>
+  <button class="logout-btn" onclick="toggleLogout()">Logout</button>
+  
+</div>
+<body>
+  <div class="content">
+    <h1 style="color: white;">Billing</h1>
+    <div class="button-container">
+      <button class="add-trucking-btn" onclick="addBilling()">Add a Billing</button>
+      <button class="add-trucking-btn-modify" onclick="toggleModify()">Modify</button>
+      <button class="export-btn" id="exportExcelButton" href="#" onclick="exportTableToExcel()">Export to Excel</button>
+    </div>
+    <!-- Scrollable table container -->
+    <div class="table-container">
+      <table id="billingTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Delivery ID</th>
+            <th>Delivery Address</th>
+            <th>Delivery Date and Time</th>
+            <th>Has No</th>
+            <th>Truck ID</th>
+            <th>Plate No</th>
+            <th>Origin</th>
+            <th>Consignee</th>
+            <th>Items</th>
+            <th id="actionColumnHeader" style="display: none;">Action</th>
+          </tr>
+        </thead>
+        <tbody id="billingTableBody"></tbody>>  
+          <% billings.forEach(billing => { %>
+            <tr>
+              <td><%= billing.billing_id %></td>
+              <td><%= billing.delivery_id %></td>
+              <td><%= billing.delivery_address %></td>
+              <td><%= new Date(billing.delivery_date).toLocaleString() %></td>
+              <td><%= billing.hasno %></td>
+              <td><%= billing.truck_id %></td>
+              <td id="truckPlateNo_<%= billing.truck_id %>"><%= billing.truck_id %></td>
+              <td><%= billing.origin %></td>
+              <td><%= billing.consignee %></td>
+              <td><%= billing.items %></td>
+              <td class="edit-button-column" style="display: none;">
+                <button class="edit-button" onclick="editBilling('<%= billing.billing_id %>')">Edit</button>
+                <button class="delete-button" onclick="deleteBilling('<%= billing.billing_id %>')">Delete</button>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+    <table id="exportTable" style="display: none;">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>ORIGIN</th>
+            <th>CONSIGNEE</th>
+            <th>LOCATION</th>
+            <th>LA #</th>
+            <th>TS #</th>
+            <th>SO #</th>
+            <th>MTS #</th>
+            <th>TRUCK #</th>
+            <th>ITEMS</th>
+            <th>Delivery Date</th>
+            <th>Has #</th>
+            <th>QTY</th>
+            <th>RATE (Net of VAT)</th>
+            <th>BASIC FREIGHT CHARGES</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% billings.forEach(billing => { %>
+            <tr>
+              <td><%= billing.billing_id %></td>
+              <td><%= billing.origin %></td>
+              <td><%= billing.consignee %></td>
+              <td><%= billing.delivery_address %></td>
+              <td> </td>
+              <td> </td>
+              <td> </td>
+              <td> </td>
+              <td id="truckPlateNo_<%= billing.truck_id %>"><%= billing.truck_id %></td>
+              <td><%= billing.items %></td>
+              <td><%= new Date(billing.delivery_date).toLocaleString() %></td>              
+              <td><%= billing.hasno %></td>
+              <td><%= billing.qty %></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+  </div>
+
+  <!-- Form container that appears when the button is clicked -->
+  <div class="form-container" id="formContainer">
+    <form id="addForm" onsubmit="return submitBilling()">
+      <h1>Add a Billing</h1>
+      <label for="delivery_id">Delivery ID:</label>
+      <select id="delivery_id" name="delivery_id" onchange="onDeliveryIdChange()" required class="dropdown-style"></select>
+
+      <label for="delivery_date">Address:</label>
+      <input type="text" id="delivery_date" name="delivery_date" readonly>
+
+      <label for="delivery_address">Location:</label>
+      <input type="text" id="delivery_address" name="delivery_address" readonly>
+
+      <label for="hasno">Has No:</label>
+      <input type="text" id="hasno" name="hasno" readonly>
+
+      <label for="truck_id">Truck ID:</label>
+      <input type="text" id="truck_id" name="truck_id" readonly>
+
+      <label for="origin">Origin:</label>
+      <input type="text" id="origin" name="origin" required>
+
+      <label for="consignee">Consignee:</label>
+      <input type="text" id="consignee" name="consignee" required>
+      
+      <label for="items">Item:</label>
+      <input type="text" id="items" name="items" required>
+
+      <label for="qty">Quantity:</label>
+      <input type="qty" id="qty" name="qty" required>
+
+
+      <button type="submit">Submit</button>
+      <button type="button" onclick="toggleFormContainerBilling()">Close</button>
+    </form>
+  </div>
+
+  <div class="form-container" id="editFormOverlay" style="display: none;">
+    <form id="editForm" onsubmit="return editBillingSubmit()">
+  
+      <!-- Read-only input field for Trucking ID -->
+      <label for="edit_billing_id">Billing ID:</label>
+      <input type="text" id="edit_billing_id" name="edit_billing_id" readonly>
+
+      <label for="edit_origin">Origin:</label>
+      <input type="text" id="edit_origin" name="edit_origin" required>
+  
+      <label for="edit_consignee">Consignee:</label>
+      <input type="text" id="edit_consignee" name="edit_consignee" required>
+  
+      <label for="edit_items">Items:</label>
+      <input type="text" id="edit_items" name="edit_items" required>
+  
+      <label for="edit_qty">Quantity:</label>
+      <input type="text" id="edit_qty" name="edit_qty" required>
+  
+      <button type="submit">Update</button>
+      <button type="button" onclick="toggleEditFormOverlayBilling()">Close</button>
+    </form>
+  </div>
+  
+
+  <!-- Add the script section for any specific functionality related to trucking -->
+  <script src="/functions.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script src="https://unpkg.com/tableexport@5.0.2/dist/js/tableexport.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+  <script>
+    compareTruckUnitIdsAndPlateNoDeliveryBill();
+    compareTruckUnitIdsAndPlateNoDeliveryBill();
+  </script>
+</body>
+</html>

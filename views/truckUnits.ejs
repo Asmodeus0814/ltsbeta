@@ -1,0 +1,381 @@
+<!-- views/trucking.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trucking Companies</title>
+  <style>
+    body {
+    display: flex;
+    background-image: url('/uploads/background.jpg');
+    align-items: stretch;
+    margin: 0;
+    font-family: Arial, sans-serif; /* Added a generic font family */
+  }
+  
+  .sidebar {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh; /* Set the height of the sidebar to cover the full height of the page */
+    box-sizing: border-box; /* Include padding and border in the total width/height */
+  }
+  
+  .content {
+    flex: 1;
+    padding: 20px;
+    box-sizing: border-box; /* Include padding and border in the total width/height */
+  }
+  
+  h1 {
+    margin-bottom: 20px;
+  }
+  
+  .nav-item {
+    margin-bottom: 10px;
+    width: 100%; /* Make the navigation items take full width */
+    text-align: center; /* Center the text within each navigation item */
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .nav-item:hover {
+    background-color: #555; /* Change background color on hover */
+  }
+  
+  .logout-btn {
+    margin-top: auto; /* Push the logout button to the bottom of the container */
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #c0392b; /* Red color for logout button */
+    color: #fff;
+  }
+  
+  .logout-btn:hover {
+    background-color: #992d22; /* Darker red on hover */
+  }
+  
+  p {
+    margin-top: 20px;
+  }
+    .content {
+      margin: 20px; /* Add equal margin around the content */
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: white;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center; /* Center-align text */
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    .table-container {
+      max-height: 700px; /* Set the maximum height for the table container */
+      overflow-y: auto; /* Enable vertical scrolling */
+    }
+
+    .form-container {
+      display: none;
+      position: absolute;
+      top: 20px; /* Adjusted top position */
+      right: 10px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .form-container.active {
+      display: block;
+    }
+
+    .form-container form {
+      text-align: left;
+    }
+
+    .form-container label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    .form-container input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
+    .form-container button {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .edit-form-container {
+      display: none;
+      position: absolute;
+      top: 20px; /* Adjusted top position */
+      right: 10px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .edit-form-container.active {
+      display: block;
+    }
+
+    .edit-form-container form {
+      text-align: left;
+    }
+
+    .edit-form-container label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    .edit-form-container input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
+    .edit-form-container button {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    
+    .add-button {
+      padding: 10px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .add-trucking-btn {
+      position: absolute;
+      top: 80px;
+      right: 180px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .add-trucking-btn-modify {
+      position: absolute;
+      top: 80px;
+      right: 100px;
+      background-color: #e80042;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .delete-button {
+      background-color: #e80042;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .form-container select {
+     width: 100%;
+     padding: 8px;
+     margin-top: 5px; 
+     margin-bottom: 10px;
+     box-sizing: border-box;
+    }
+    .edit-form-container select {
+    position: absolute;
+    left: -9999px;
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    }
+    
+    #drop_down_edit_source_type_label {
+    display: none;
+}
+    #dropdown_edit_trucking_id_label{
+      display: none;
+    }
+    .edit-button {
+      background-color: #19faf6;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+  </style>
+  <link rel="icon" href="uploads/favicon.ico" type="image/x-icon">
+</head>
+<div class="sidebar">
+  <div class="nav-item" onclick="toggleDashboard()">Dashboard</div>
+  <div class="nav-item" onclick="toggleTrucking()">Trucking Companies</div>
+  <div class="nav-item" onclick="toggleDrivers()">Drivers</div>
+  <div class="nav-item" onclick="toggleTruckUnit()">Truck Units</div>
+  <div class="nav-item" onclick="toggleDeliveries()">Deliveries</div>
+  <div class="nav-item" onclick="toggleMaintenance()"> Maintenance</div>
+  <div class="nav-item" onclick= "toggleBilling()">Billing</div>
+  <div class="nav-item" onclick="toggleUsers()">User Settings</div>
+  <button class="logout-btn" onclick="toggleLogout()">Logout</button>
+  
+</div>
+<body>
+  <div class="content">
+    <h1 style="color: white;">Truck Units</h1>
+    <div class="button-container">
+      <button class="add-trucking-btn" onclick="toggleFormAddTruckUnits()">Add a Truck Unit</button>
+      <button class="add-trucking-btn-modify" onclick="toggleModify()">Modify</button>
+    </div>
+    <!-- Scrollable table container -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Truck Name</th>
+            <th>Source Type</th>
+            <th>Plate Number</th>
+            <th>Model</th>
+            <th>Chasis Number</th>
+            <th>Trucking Company</th>
+            <th id="actionColumnHeader" style="display: none;">Action</th>
+          </tr>
+        </thead>
+        <tbody id="truckUnitsTableBody"></tbody>>
+          <% truck_units.forEach(truckUnit => { %>
+            <tr>
+              <td><%= truckUnit.truck_id %></td>
+              <td><%= truckUnit.truck_name %></td>
+              <td id="sourceName_<%= truckUnit.source_type %>"><%= truckUnit.source_type %></td>
+              <td><%= truckUnit.truck_plateno %></td>
+              <td><%= truckUnit.model %></td>
+              <td><%= truckUnit.chasisno %></td>
+              <td id="truckingName_<%= truckUnit.trucking_id %>"><%= truckUnit.trucking_id %></td>
+              <td class="edit-button-column" style="display: none;">
+                <button class="edit-button" onclick="editTruckUnit('<%= truckUnit.truck_id %>')">Edit</button>
+                <button class="delete-button" onclick="deleteTruckUnit('<%= truckUnit.truck_id %>')">Delete</button>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+</div>
+
+<!-- Inside the form container -->
+<div class="form-container" id="formContainer">
+  <form id="addTruckUnitForm" onsubmit="return addTruckUnit()">
+    <h1>Add a Truck Unit</h1>
+    <label for="truckUnit_name">Truck Name:</label>
+    <input type="text" id="truckUnit_name" name="truckUnit_name" required>
+
+    <label for="truckUnit_source_type">Source Type:</label>
+    <select id="truckUnit_source_type" name="truckUnit_source_type" required class="dropdown-style" onchange="printSelectedValueAdd()"></select>
+
+    <label for="truckUnit_plate_no">Plate Number:</label>
+    <input type="text" id="truckUnit_plate_no" name="truckUnit_plate_no" required>
+
+    <label for="truckUnit_model">Model:</label>
+    <input type="text" id="truckUnit_model" name="truckUnit_model" required>
+
+    <label for="truckUnit_chasis_no">Chasis Number:</label>
+    <input type="text" id="truckUnit_chasis_no" name="truckUnit_chasis_no" required>
+
+    <label for="truckUnit_trucking_id">Trucking Company:</label>
+    <select id="truckUnit_trucking_id" name="truckUnit_trucking_id" required class="dropdown-style"></select>
+
+    <button type="submit">Submit</button>
+    <button type="button" onclick="toggleFormAddTruckUnits()">Close</button>
+  </form>
+</div>
+
+  <div class="edit-form-container" id="editFormOverlay" style="display: none;">
+    <form id="editForm" onsubmit="return submitEditTruckUnit()">
+
+      <label for="edit_truck_id">ID:</label>
+      <input type="text" id="edit_truck_id" name="edit_truck_id" required>
+  
+      <label for="edit_truck_name">Truck Name:</label>
+    <input type="text" id="edit_truck_name" name="edit_truck_name" required>
+
+    <label id="sourceTypeLabel" for="edit_source_type">Source Type:</label>
+    <input type="text" id="edit_source_type" name="edit_source_type" required>
+
+    <label id='drop_down_edit_source_type_label' for="drop_down_edit_source_type">Source Type:</label>
+    <select id="drop_down_edit_source_type" name="drop_down_edit_source_type" required class="dropdown-style" onchange="printSelectedValue()"></select>
+    
+    <label for="edit_truck_plateno">Plate Number:</label>
+    <input type="text" id="edit_truck_plateno" name="edit_truck_plateno" required>
+
+    <label for="edit_model">Model:</label>
+    <input type="text" id="edit_model" name="edit_model" required>
+
+    <label for="edit_chasisno">Chasis Number:</label>
+    <input type="text" id="edit_chasisno" name="edit_chasisno" required>
+
+    <label id="truckingIdLabel" for="edit_trucking_id">Trucking Company:</label>
+    <input type="text" id="edit_trucking_id" name="edit_trucking_id" required>
+
+
+    <label id='dropdown_edit_trucking_id_label' for="drop_down_edit_trucking_id">Trucking Company</label>
+    <select id="drop_down_edit_trucking_id" name="drop_down_edit_trucking_id" required class="dropdown-style" onchange="printSelectedValueEdit()"></select>
+    <button type="button" onclick="populateEditTruckingDropdownTruckUnit()">Change Trucking Company</button>
+
+    <button type="button" onclick="populateSourceTypeDropdownEdit()">Change Source Type</button>
+
+      <button type="submit">Update</button>
+      <button type="button" onclick="toggleEditFormOverlayTruckUnit()">Close</button>
+    </form>
+  </div>
+  
+
+  <!-- Add the script section for any specific functionality related to trucking -->
+  <script src="/functions.js"></script>
+  <script>
+    compareSourceTypesAndNamesTruckUnit();
+    compareTruckingIdsAndNamesTruckUnit();
+  </script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!-- views/login.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-image: url('/uploads/ltsbg.png');
+      background-size: cover;
+      background-position: center;
+      font-family: Arial, sans-serif; /* Added a generic font family */
+    }
+
+    .container {
+      background-color: rgba(255, 255, 255, 0.9); /* Added a semi-transparent white background to the container */
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 40px; /* Increased padding for a larger container */
+      width: 400px; /* Increased width for a larger container */
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 24px;
+      text-transform: uppercase; /* Convert text to uppercase */
+      letter-spacing: 2px; /* Adjust letter spacing for style */
+    }
+
+    h1:first-letter {
+      font-size: 32px; /* Larger font size for the first letter */
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #3498db;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+    .logo {
+      max-width: 100%; /* Ensure the logo doesn't exceed its container */
+      height: auto; /* Maintain aspect ratio */
+      margin-bottom: 20px; /* Adjust margin as needed */
+    }
+  </style>
+</head>
+<link rel="icon" href="uploads/favicon.ico" type="image/x-icon">
+<body>
+  <div class="container">
+    <img src="/uploads/lts-logo.png" alt="LTS Logo" class="logo">
+    <h1 id="typing-title">Lolong      Trucking      Services</h1>
+    <form action="/login" method="post">
+      <label for="loginUsername">Username:</label>
+      <input type="text" id="loginUsername" name="username" required>
+      <br>
+      <label for="loginPassword">Password:</label>
+      <input type="password" id="loginPassword" name="password" required>
+      <br>
+      <button type="submit">Login</button>
+    </form>
+  </div>
+
+  <script>
+    // Typing animation for the title
+    const titleElement = document.getElementById('typing-title');
+    const titleText = titleElement.innerText;
+    titleElement.innerText = '';
+
+    let i = 0;
+    function typeWriter() {
+      if (i < titleText.length) {
+        titleElement.innerText += titleText.charAt(i);
+        i++;
+        setTimeout(typeWriter, 100); // Adjust the typing speed (in milliseconds)
+      }
+    }
+
+    typeWriter();
+  </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!-- views/register.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    form {
+      text-align: center;
+      width: 300px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+  </style>
+  <link rel="icon" href="uploads/favicon.ico" type="image/x-icon">
+</head>
+<body>
+  <h1>Register</h1>
+
+  <form action="/register" method="post">
+    <label for="registerUsername">Username:</label>
+    <input type="text" id="registerUsername" name="username" required>
+    <br>
+    <label for="registerPassword">Password:</label>
+    <input type="password" id="registerPassword" name="password" required>
+    <br>
+    <label for="registerName">Name:</label>
+    <input type="text" id="registerName" name="name" required>
+    <br>
+    <button type="submit">Register</button>
+  </form>
+</body>
+</html>

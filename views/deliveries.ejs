@@ -1,0 +1,801 @@
+<!-- views/trucking.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="uploads/favicon.ico" type="image/x-icon">
+  <title>Deliveries</title>
+  <style>
+
+#proofContent button {
+    /* Button styles */
+    padding: 10px 20px;
+    background-color: #3498db; /* Button background color */
+    color: #ffffff; /* Button text color */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  #proofContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  max-width: 50%;
+  max-height: 50%;
+  margin: 10% auto 0; /* Adjust the top margin as needed */
+}
+
+#proofImage {
+  max-width: 70%; /* Set the maximum width of the image */
+  max-height: 70%; /* Set the maximum height of the image */
+  width: auto; /* Maintain aspect ratio */
+  height: auto; /* Maintain aspect ratio */
+}
+
+/* Style for the overlay */
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1;
+}
+  /* Style for the close button */
+  .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+    body {
+    display: flex;
+    align-items: stretch;
+    margin: 0;
+    font-family: Arial, sans-serif; /* Added a generic font family */
+    background-image: url('/uploads/background.jpg');
+  }
+  
+  .sidebar {
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    width: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh; /* Set the height of the sidebar to cover the full height of the page */
+    box-sizing: border-box; /* Include padding and border in the total width/height */
+  }
+  
+  .content {
+    flex: 1;
+    padding: 20px;
+    box-sizing: border-box; /* Include padding and border in the total width/height */
+  }
+  
+  h1 {
+    margin-bottom: 20px;
+  }
+  
+  .nav-item {
+    margin-bottom: 10px;
+    width: 100%; /* Make the navigation items take full width */
+    text-align: center; /* Center the text within each navigation item */
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .nav-item:hover {
+    background-color: #555; /* Change background color on hover */
+  }
+  
+  .logout-btn {
+    margin-top: auto; /* Push the logout button to the bottom of the container */
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #c0392b; /* Red color for logout button */
+    color: #fff;
+  }
+  
+  .logout-btn:hover {
+    background-color: #992d22; /* Darker red on hover */
+  }
+  
+  p {
+    margin-top: 20px;
+  }
+    .content {
+      margin: 20px; /* Add equal margin around the content */
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: white
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center; /* Center-align text */
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    .table-container {
+      max-height: 400px; /* Set the maximum height for the table container */
+      overflow-y: auto; /* Enable vertical scrolling */
+    }
+
+    .form-container {
+      display: none;
+      position: absolute;
+      top: 20px; /* Adjusted top position */
+      right: 10px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .change-form-container.active {
+      display: block;
+    }
+
+    .change-form-container form {
+      text-align: left;
+    }
+
+    .change-form-container label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    .change-form-container input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
+    .change-form-container button {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .change-form-container {
+      display: none;
+      position: absolute;
+      top: 20px; /* Adjusted top position */
+      right: 10px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .change-form-container.active {
+      display: block;
+    }
+
+    .form-container form {
+      text-align: left;
+    }
+
+    .change-form-container label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    .change-form-container input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
+    .change-form-container button {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .update-change-form-container.active {
+      display: block;
+    }
+
+    .update-change-form-container form {
+      text-align: left;
+    }
+
+    .update-change-form-container label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    .update-change-form-container input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
+    .update-change-form-container button {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .update-change-form-container {
+      display: none;
+      position: absolute;
+      top: 20px; /* Adjusted top position */
+      right: 10px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .update-change-form-container.active {
+      display: block;
+    }
+
+    .update-update-form-container form {
+      text-align: left;
+    }
+
+    .update-change-form-container label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    .update-change-form-container input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
+    .update-change-form-container button {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .add-button {
+      padding: 10px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .add-delivery-btn {
+      position: absolute;
+      top: 80px;
+      right: 180px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .add-delivery-btn-modify {
+      position: absolute;
+      top: 80px;
+      right: 100px;
+      background-color: #e80042;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .edit-form-container {
+      display: none;
+      position: absolute;
+      top: 20px; /* Adjusted top position */
+      right: 10px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .form-container.active {
+      display: block;
+    }
+
+    .form-container form {
+      text-align: left;
+    }
+
+    .form-container label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    .form-container input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
+    .form-container button {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .edit-form-container {
+      display: none;
+      position: absolute;
+      top: 20px; /* Adjusted top position */
+      right: 10px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .edit-form-container.active {
+      display: block;
+    }
+
+    .edit-form-container form {
+      text-align: left;
+    }
+
+    .edit-form-container label {
+      display: block;
+      margin-top: 10px;
+    }
+
+    .edit-form-container input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
+    .edit-form-container button {
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .delete-button {
+      background-color: #e80042;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .generate-button {
+      background-color: #19fa42;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .change-button {
+      background-color: #d808df;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .display-button {
+      background-color: #df089f;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .edit-button {
+      background-color: #19faf6;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .form-container select {
+     width: 100%;
+     padding: 8px;
+     margin-top: 5px;
+     margin-bottom: 10px;
+     box-sizing: border-box;
+    }
+
+    .edit-form-container select {
+    position: absolute;
+    left: -9999px;
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    }
+
+    #drop_down_edit_trucking_id_label{
+      display: none;
+    }
+    #drop_down_edit_driver_id_label{
+      display: none;
+    }
+    #drop_down_edit_truck_id_label{
+      display: none;
+    }
+    
+  </style>
+</head>
+<div class="sidebar">
+  <div class="nav-item" onclick="toggleDashboard()">Dashboard</div>
+  <div class="nav-item" onclick="toggleTrucking()">Trucking Companies</div>
+  <div class="nav-item" onclick="toggleDrivers()">Drivers</div>
+  <div class="nav-item" onclick="toggleTruckUnit()">Truck Units</div>
+  <div class="nav-item" onclick="toggleDeliveries()">Deliveries</div>
+  <div class="nav-item" onclick="toggleMaintenance()"> Maintenance</div>
+  <div class="nav-item" onclick= "toggleBilling()">Billing</div>
+  <div class="nav-item" onclick="toggleUsers()">User Settings</div>
+  <button class="logout-btn" onclick="toggleLogout()">Logout</button>
+  
+</div>
+<body>
+  <div class="content">
+    <h1 style="color: white;">Deliveries</h1>
+    <div class="button-container">
+      <button class="add-delivery-btn" onclick="toggleFormContainerDeliveries()">Add a Delivery</button>
+      <button class="add-delivery-btn-modify" onclick="toggleModifyDelivery()">Modify</button>
+    </div>
+    <!-- Scrollable table container -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Has No</th>
+            <th>Trucking ID</th>
+            <th>Trucking Company</th>
+            <th>Driver</th>
+            <th>Truck</th>
+            <th>Plate Number</th>
+            <th>Helper</th>
+            <th>Business Name</th>
+            <th>Delivery Address</th>
+            <th>Contact Person</th>
+            <th>Contact Number</th>
+            <th>Delivery Date and Time</th>
+            <th>Dispatch By</th>
+            <th>Dispatch Date and Time</th>
+            <th>Status</th>
+            <th id="actionColumnHeader" style="display: none;">Action</th>
+          </tr>
+        </thead>
+        <tbody id="deliveriesTableBody"></tbody>>
+          <% deliveries.forEach(delivery => { %>
+            <% if (delivery.status_id === 0) { %>
+            <tr>
+              <td id="deliveryId_<%= delivery.trucking_id %>"><%= delivery.delivery_id  %></td>
+              <td><%= delivery.hasno%></td>
+              <td><%= delivery.trucking_id %></td>
+              <td id="truckingName_<%= delivery.trucking_id %>"><%= delivery.trucking_id %></td>
+              <td id="truckingName_<%= delivery.driver_id %>"><%= delivery.driver_id %></td>
+              <td id="truckingName_<%= delivery.truck_id %>"><%= delivery.truck_id %></td>
+              <td id="truckPlateNo_<%= delivery.truck_id %>"><%= delivery.truck_id %></td>
+              <td><%= delivery.helper %></td>
+              <td><%= delivery.bussiness_name %></td>
+              <td><%= delivery.delivery_address %></td>
+              <td><%= delivery.contact_person %></td>
+              <td><%= delivery.contactno %></td>
+              <td><%= new Date(delivery.delivery_date).toLocaleString() %></td>
+              <td><%= delivery.dispatch_by %></td>
+              <td><%= new Date(delivery.dispatch_date).toLocaleString() %></td>
+              <td id="statusName_<%= delivery.status_id %>"><%= delivery.status_id %></td>
+              <td class="edit-button-column" style="display: none;">
+                <button class="edit-button" onclick="editDelivery('<%= delivery.delivery_id %>')">Edit</button>
+                <button class="delete-button" onclick="deleteDelivery('<%= delivery.delivery_id %>')">Delete</button>
+                <button class="generate-button" onclick="collectData('<%= delivery.delivery_id %>')">Collect Data</button>
+                <button class="change-button" onclick="changeStatus('<%= delivery.delivery_id %>')">Change Status</button>
+             </td>
+            </tr>
+            <% } %>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+    <h1 style="color: white;">Completed Deliveries</h1>
+    <div class="table-container">
+      <table id="completedDeliveriesTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Has No</th>
+            <th>Trucking ID</th>
+            <th>Trucking Company</th>
+            <th>Driver</th>
+            <th>Truck</th>
+            <th>Plate Number</th>
+            <th>Helper</th>
+            <th>Business Name</th>
+            <th>Delivery Address</th>
+            <th>Contact Person</th>
+            <th>Contact Number</th>
+            <th>Delivery Date and Time</th>
+            <th>Dispatch By</th>
+            <th>Dispatch Date and Time</th>
+            <th>Status</th>
+            <th>Receive By</th>
+            <th>Receive Date and Time</th>
+            <th>Receive Proof</th>
+            <th id="actionColumnHeader" style="display: none;">Action</th>
+          </tr>
+        </thead>
+        <tbody id="ComDeliveriesTableBody"></tbody>>
+          <% deliveries.forEach(delivery => { %>
+            <% if (delivery.status_id === 1) { %>
+            <tr>
+              <td id="deliveryId_<%= delivery.trucking_id %>"><%= delivery.delivery_id  %></td>
+              <td><%= delivery.hasno%></td>
+              <td><%= delivery.trucking_id %></td>
+              <td id="truckingName_<%= delivery.trucking_id %>"><%= delivery.trucking_id %></td>
+              <td id="truckingName_<%= delivery.driver_id %>"><%= delivery.driver_id %></td>
+              <td id="truckingName_<%= delivery.truck_id %>"><%= delivery.truck_id %></td>
+              <td id="truckPlateNo_<%= delivery.truck_id %>"><%= delivery.truck_id %></td>
+              <td><%= delivery.helper %></td>
+              <td><%= delivery.bussiness_name %></td>
+              <td><%= delivery.delivery_address %></td>
+              <td><%= delivery.contact_person %></td>
+              <td><%= delivery.contactno %></td>
+              <td><%= new Date(delivery.delivery_date).toLocaleString() %></td>
+              <td><%= delivery.dispatch_by %></td>
+              <td><%= new Date(delivery.dispatch_date).toLocaleString() %></td>
+              <td id="statusName_<%= delivery.status_id %>"><%= delivery.status_id %></td>
+              <td><%= delivery.receive_by %></td>
+              <td><%= new Date(delivery.receive_date).toLocaleString() %></td>
+              <td><button class="display-button" onclick="displayProof('<%= delivery.receive_proof %>')">View</button></td>
+              <td class="edit-button-column" style="display: none;">
+                <button class="change-button" onclick="editDeliveryCom('<%= delivery.delivery_id %>')">Edit</button>
+                <button class="delete-button" onclick="deleteDeliveryCom('<%= delivery.delivery_id %>')">Delete</button>
+                <button class="edit-button" onclick="collectDataCom('<%= delivery.delivery_id %>')">Collect Data</button>
+              </td>
+            </tr>
+            <% } %>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="proofOverlay" class="overlay" style="display: none;">
+    <div id="proofContent">
+      <img id="proofImage" src="" alt="Receipt Proof">
+      <button type="button" onclick="closeProofOverlay()">Close</button>
+    </div>
+  </div>
+  
+
+  <!-- Form container that appears when the button is clicked -->
+  <div class="form-container" id="formContainer">
+    <form id="addForm" onsubmit="return addDelivery()">
+      <h1>Add a Delivery</h1>
+  
+      <label for="hasno">Has No:</label>
+      <input type="text" id="hasno" name="hasno" required readonly>
+  
+      <label for="trucking_id">Trucking Company:</label>
+      <select id="trucking_id" name="trucking_id" required class="dropdown-style"></select>
+  
+      <label for="driver_id">Driver:</label>
+      <select id="driver_id" name="driver_id" required class="dropdown-style"></select>
+  
+      <label for="truck_id">Truck Unit:</label>
+      <select id="truck_id" name="truck_id" required class="dropdown-style"></select>
+
+      <label for="helper">Helper:</label>
+      <input type="text" id="helper" name="helper" required>
+  
+      <label for="bussiness_name">Business Name:</label>
+      <input type="text" id="bussiness_name" name="bussiness_name" required>
+  
+      <label for="delivery_address">Delivery Address:</label>
+      <input type="text" id="delivery_address" name="delivery_address" required>
+  
+      <label for="contact_person">Contact Person:</label>
+      <input type="text" id="contact_person" name="contact_person" required>
+  
+      <label for="contactno">Contact Number:</label>
+      <input type="text" id="contactno" name="contactno" required>
+  
+      <label for="delivery_date">Delivery Date and Time:</label>
+      <input type="datetime-local" id="delivery_date" name="delivery_date" required onchange="logDateTime()">
+  
+      <label for="dispatch_by">Dispatched By:</label>
+      <input type="text" id="dispatch_by" name="dispatch_by" required>
+  
+      <label for="dispatch_date">Dispatch Date and Time:</label>
+      <input type="datetime-local" id="dispatch_date" name="dispatch_date" required>
+    
+      <button type="submit">Submit</button>
+      <button type="button" onclick="toggleFormContainerDeliveries()">Close</button>
+    </form>
+  </div>
+
+  <div class="change-form-container" id="changeformContainer">
+    <form id="changeForm" onsubmit="return changeStatusDelivery()">
+      <h1>Completion Form</h1>
+  
+      <label for="c_delivery_id">Delivery ID:</label>
+      <input type="text" id="c_delivery_id" name="c_delivery_id" readonly>
+  
+      <label for="c_receive_by">Received By:</label>
+      <input type="text" id="c_receive_by" name="c_receive_by" required>
+  
+      <label for="c_receive_date">Received Date and Time:</label>
+      <input type="datetime-local" id="c_receive_date" name="c_receive_date" required onchange="logDateTime()">
+  
+      <!-- File uploader for Receive Proof -->
+      <label for="c_receive_proof">Receive Proof:</label>
+      <input type="file" id="c_receive_proof" name="c_receive_proof" accept=".pdf, .doc, .docx, .jpg, .jpeg, .png" required>
+  
+      <button type="submit">Submit</button>
+      <button type="button" onclick="toggleChangeEditFormOverlay()">Close</button>
+    </form>
+  </div>
+
+  <div class="update-change-form-container" id="changeformContainerCom">
+    <form id="changeForm" onsubmit="return changeStatusDeliveryCom()">
+      <h1>Edit Completion Form</h1>
+
+      <label for="com_delivery_id">Delivery ID:</label>
+      <input type="text" id="com_delivery_id" name="com_delivery_id" readonly>
+  
+      <label for="com_receive_by">Received By:</label>
+      <input type="text" id="com_receive_by" name="com_receive_by" required>
+  
+      <label for="com_receive_date">Received Date and Time:</label>
+      <input type="datetime-local" id="com_receive_date" name="com_receive_date" required onchange="logDateTime()">
+
+            <!-- File uploader for Receive Proof -->
+      <label for="com_receive_proof">Receive Proof:</label>
+      <input type="file" id="com_receive_proof" name="com_receive_proof" accept=".jpg, .jpeg, .png" required>
+    
+      <button type="submit">Submit</button>
+      <button type="button" onclick="toggleChangeEditFormOverlayCom()">Close</button>
+    </form>
+  </div>
+
+  <div class="edit-form-container" id="editFormOverlay" style="display: none;">
+    <form id="editForm" onsubmit="return editDeliverySubmit()">
+  
+        <!-- Read-only input field for Has No -->
+        <label for="edit_delivery_id">Delivery ID:</label>
+        <input type="text" id="edit_delivery_id" name="edit_delivery_id " readonly>
+
+        <label for="edit_hasno">Has No:</label>
+        <input type="text" id="edit_hasno" name="edit_hasno" readonly>
+
+        <label id="truckingIdLabel" for="edit_trucking_id">Trucking Company:</label>
+        <input type="text" id="edit_trucking_id" name="edit_trucking_id" readonly>
+  
+        <label id="drop_down_edit_trucking_id_label"  for="drop_down_edit_trucking_id">Trucking Company:</label>
+        <select id="drop_down_edit_trucking_id" name="drop_down_edit_trucking_id" required class="dropdown-style"></select>
+        
+        <label id="driverIdLabel" for="edit_driver_id">Driver:</label>
+        <input type="text" id="edit_driver_id" name="edit_driver_id" readonly>
+        
+        <label id="drop_down_edit_driver_id_label" for="drop_down_edit_driver_id">Driver:</label>
+        <select id="drop_down_edit_driver_id" name="drop_down_edit_driver_id" required class="dropdown-style"></select>
+
+        <label id="truckUnitIdLabel" for="edit_truck_id">Truck Unit:</label>
+        <input type="text" id="edit_truck_id" name="edit_truck_id" readonly>
+  
+        <label id="drop_down_edit_truck_id_label" for="drop_down_edit_truck_id">Truck Unit:</label>
+        <select id="drop_down_edit_truck_id" name="drop_down_edit_truck_id" required class="dropdown-style"></select>
+  
+        <label for="edit_helper">Helper:</label>
+        <input type="text" id="edit_helper" name="edit_helper" required>
+  
+        <label for="edit_bussiness_name">Business Name:</label>
+        <input type="text" id="edit_bussiness_name" name="edit_bussiness_name" required>
+  
+        <label for="edit_delivery_address">Delivery Address:</label>
+        <input type="text" id="edit_delivery_address" name="edit_delivery_address" required>
+  
+        <label for="edit_contact_person">Contact Person:</label>
+        <input type="text" id="edit_contact_person" name="edit_contact_person" required>
+  
+        <label for="edit_contactno">Contact Number:</label>
+        <input type="text" id="edit_contactno" name="edit_contactno" required>
+  
+        <label for="edit_delivery_date">Delivery Date and Time:</label>
+        <input type="datetime-local" id="edit_delivery_date" name="edit_delivery_date" required onchange="logDateTime()">
+  
+        <label for="edit_dispatch_by">Dispatched By:</label>
+        <input type="text" id="edit_dispatch_by" name="edit_dispatch_by" required>
+  
+        <label for="edit_dispatch_date">Dispatch Date and Time:</label>
+        <input type="datetime-local" id="edit_dispatch_date" name="edit_dispatch_date" required>
+
+        <button type="button" onclick="populateEditTruckingDropdownDelivery()">Change Trucking Company</button>
+        <button type="button" onclick="populateEditDriverDropdownDelivery()">Change Driver</button>
+        <button type="button" onclick="populateEditTruckUnitDropdownDelivery()">Change Truck Unit</button>
+        <button type="submit">Update</button>
+        <button type="button" onclick="toggleEditFormOverlay()">Close</button>
+    </form>
+</div>
+  
+
+  <!-- Add the script section for any specific functionality related to trucking -->
+  <script src="/functions.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.0.2/mammoth.browser.min.js"></script>
+  <script>
+    compareStatusIdAndNamesDelivery();
+    compareTruckingIdsAndNamesDelivery();
+    compareDriverIdsAndNamesDelivery();
+    compareTruckUnitIdsAndNamesDelivery();
+    compareTruckUnitIdsAndPlateNoDelivery();
+    compareStatusIdAndNamesDeliveryCom();
+    compareTruckingIdsAndNamesDeliveryCom();
+    compareDriverIdsAndNamesDeliveryCom();
+    compareTruckUnitIdsAndNamesDeliveryCom();
+    compareTruckUnitIdsAndPlateNoDeliveryCom();
+  </script>
+</body>
+</html>

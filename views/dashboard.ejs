@@ -1,0 +1,173 @@
+<!-- views/dashboard.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="uploads/favicon.ico" type="image/x-icon">
+  <title>Dashboard</title>
+  <link rel="stylesheet" type="text/css" href="/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    .graph-container {
+      border: 2px solid #000; /* Adjust the color and thickness as needed */
+      border-radius: 10px; /* Optional: Add border radius for rounded corners */
+      margin: 10px; /* Optional: Add margin for spacing */
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <%- include('navbar.ejs') %>
+  </div>
+  <div class="content">
+    <h1 style="color: white;">Welcome <%= name %></h1>
+    <div id="ongoingDeliveriesText"></div>
+
+    <div class="graph-container" style="width: 600px; height: 500px; float: left; background-color: white;">
+      <canvas id="deliveryGraph" width="600" height="500"></canvas>
+    </div>
+    
+    <div class="graph-container" style="width: 600px; height: 500px; float: right; background-color: white;">
+      <canvas id="truckUnitsGraph" width="600" height="500"></canvas>
+    </div>
+
+      <div style="clear: both;"></div> 
+  </div>
+
+  <!-- Add the script section for toggleDashboard function -->
+  <script src="/functions.js"></script>
+  <script>
+    // Fetch data from the server and render the graph
+    fetch('/getCompletedDeliveries')
+      .then(response => response.json())
+      .then(data => {
+        // Process the data and render the graph using Chart.js
+        renderDeliveryGraph(data, 'deliveryGraph');
+      })
+      .catch(error => {
+        console.error('Error fetching completed deliveries:', error);
+      });
+
+    // Function to render a delivery graph using Chart.js
+    function renderDeliveryGraph(data, canvasId) {
+      // Process data and create a graph using Chart.js
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+      const monthlyCounts = Array.from({ length: 12 }, () => 0);
+
+      data.forEach(delivery => {
+        const monthIndex = new Date(delivery.delivery_date).getMonth();
+        monthlyCounts[monthIndex]++;
+      });
+
+      // Use Chart object from Chart.js library
+      const ctx = document.getElementById(canvasId).getContext('2d');
+
+      const myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: months,
+          datasets: [{
+            label: 'Completed Deliveries by Month',
+            data: monthlyCounts,
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    function renderOngoingDeliveriesText() {
+  // Get the element where you want to display the ongoing deliveries text
+  const ongoingDeliveriesText = document.getElementById('ongoingDeliveriesText');
+
+  // Fetch the ongoing deliveries data
+  fetch('/getOngoingDeliveries')
+    .then(response => response.json())
+    .then(ongoingDeliveriesData => {
+      // Assuming ongoingDeliveriesData is an array of objects with properties 'delivery_id' and 'delivery_date'
+      const ongoingDeliveriesCount = ongoingDeliveriesData.length;
+
+      // Get today's date in YYYY-MM-DD format
+      const today = new Date().toISOString().split('T')[0];
+
+      // Filter the data for ongoing deliveries with delivery_date not yet passed for today
+      const filteredOngoingDeliveries = ongoingDeliveriesData.filter(delivery => {
+        return delivery.delivery_date >= today;
+      });
+
+      // Display the ongoing deliveries text
+      ongoingDeliveriesText.innerHTML = `
+      <div id="ongoingDeliveriesCount" style="font-size: 36px; font-weight: bold; color: pink; text-shadow: -1px -1px 1px black, 1px -1px 1px black, -1px 1px 1px black, 1px 1px 1px black;">
+         ${today} Ongoing Deliveries: ${ongoingDeliveriesCount}
+      </div>
+      `;
+    })
+    .catch(error => {
+      console.error('Error fetching ongoing deliveries:', error);
+    });
+}
+// Call the function to render the ongoing deliveries text
+renderOngoingDeliveriesText();
+
+function renderTruckUnitsGraph() {
+  // Fetch data for Truck Units
+  fetch('/getTruckUnitsGraph')
+    .then(response => response.json())
+    .then(truckUnitsData => {
+      // Assuming truckUnitsData is an array of objects with properties 'truck_id' and 'source_type'
+      const truckUnitsByType = { 0: [], 1: [], 2: [] };
+
+      // Filter the data based on source_type
+      truckUnitsData.forEach(truckUnit => {
+        truckUnitsByType[truckUnit.source_type].push(truckUnit.truck_id);
+      });
+
+      // Get the canvas element and its 2d context
+      const canvas = document.getElementById('truckUnitsGraph');
+      const context = canvas.getContext('2d');
+
+      // Render a bar graph using Chart.js
+      new Chart(context, {
+        type: 'bar',
+        data: {
+          labels: ['Owned', 'Outsourced'],
+          datasets: [
+            {
+              label: 'Truck Units',
+              backgroundColor: ['blue', 'green', 'red'],
+              data: [
+                truckUnitsByType[1].length,
+                truckUnitsByType[2].length,
+              ],
+            },
+          ],
+        },
+        options: {
+          title: {
+            display: true,
+            text: 'Truck Units by Source Type',
+          },
+        },
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching truck units:', error);
+    });
+}
+renderTruckUnitsGraph();
+
+  </script>
+</body>
+</html>
